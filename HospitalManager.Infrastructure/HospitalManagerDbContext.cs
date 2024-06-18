@@ -14,7 +14,7 @@ namespace HospitalManager.Infrastructure
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite("Data Source= C:\\\\Users\\\\gsnogueira\\\\Desktop\\\\HospitalManager\\\\HospitalManager.db\")");
+            optionsBuilder.UseSqlite("Data Source= C:\\Users\\gsnogueira\\source\\repos\\HospitalManager.API\\Database.db");
         }
 
     }

@@ -20,6 +20,6 @@ namespace HospitalManager.Infrastructure.Entities
 
         public string DocImg { get; set; } = string.Empty;
 
-        public int AppointmentId { get; set; }
+        public Guid AppointmentId { get; set; }
     }
 }

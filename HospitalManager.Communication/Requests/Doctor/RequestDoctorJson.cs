@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HospitalManager.Communication.Requests
+namespace HospitalManager.Communication.Requests.Doctor
 {
     public class RequestDoctorJson
     {

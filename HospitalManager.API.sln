@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HospitalManager.API", "HospitalManager.API\HospitalManager.API.csproj", "{9F4A34C1-E5C2-45D8-8F45-7B9EB99D081E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HospitalManager.API", "HospitalManager.API\HospitalManager.API.csproj", "{9F4A34C1-E5C2-45D8-8F45-7B9EB99D081E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HospitalManager.Exceptions", "HospitalManager.Exceptions\HospitalManager.Exceptions.csproj", "{2CDB2A43-1B59-4A9D-BDEA-8D8DD8D027DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HospitalManager.Exceptions", "HospitalManager.Exceptions\HospitalManager.Exceptions.csproj", "{2CDB2A43-1B59-4A9D-BDEA-8D8DD8D027DA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HospitalManager.Communication", "HospitalManager.Communication\HospitalManager.Communication.csproj", "{08B149C9-89BC-4783-9AB1-4875DCE32EC1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HospitalManager.Communication", "HospitalManager.Communication\HospitalManager.Communication.csproj", "{08B149C9-89BC-4783-9AB1-4875DCE32EC1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HospitalManager.Infrastructure", "HospitalManager.Infrastructure\HospitalManager.Infrastructure.csproj", "{5C70BDB3-F21D-48BB-AF3C-50D1C57DEBEC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HospitalManager.Infrastructure", "HospitalManager.Infrastructure\HospitalManager.Infrastructure.csproj", "{5C70BDB3-F21D-48BB-AF3C-50D1C57DEBEC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HospitalManager.Application", "HospitalManager.Application\HospitalManager.Application.csproj", "{7B734D88-CBD6-48E9-A691-1A041662B2BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HospitalManager.Application", "HospitalManager.Application\HospitalManager.Application.csproj", "{7B734D88-CBD6-48E9-A691-1A041662B2BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

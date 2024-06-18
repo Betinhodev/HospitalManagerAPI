@@ -5,7 +5,7 @@ namespace HospitalManager.Infrastructure.Entities
     public class Covenant
     {
         [Key]
-        public int CovenantId { get; set; }
+        public int Id { get; set; }
         public string CovenantName { get; set; } = string.Empty;
     }
 }

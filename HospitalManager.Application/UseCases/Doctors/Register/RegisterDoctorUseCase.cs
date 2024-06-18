@@ -1,14 +1,12 @@
-﻿using HospitalManager.Communication.Requests;
-using HospitalManager.Communication.Responses;
+﻿using HospitalManager.Communication.Requests.Doctor;
+using HospitalManager.Communication.Responses.Doctor;
 using HospitalManager.Exceptions;
 using HospitalManager.Infrastructure;
 using HospitalManager.Infrastructure.Entities;
-using System.Net.Http.Headers;
-using System.Security.Cryptography.X509Certificates;
 
 namespace HospitalManager.Application.UseCases.Doctors.Register;
 
-    public class RegisterDoctorUseCase
+public class RegisterDoctorUseCase
     {
         public ResponseRegisterDoctorJson Execute(RequestDoctorJson request)
         {

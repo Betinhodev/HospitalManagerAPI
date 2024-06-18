@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using HospitalManager.Infrastructure.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace HospitalManager.Infrastructure.Entities
 {
@@ -9,7 +10,7 @@ namespace HospitalManager.Infrastructure.Entities
         public int DoctorId { get; set; }
         public Doctor Doctor{ get; set; }
         public DateTime Date { get; set; }
-        public Enum? Status { get; set; }
+        public AppointmentStatus? Status { get; set; }
         public int PatientId { get; set; }
         public Patient? Patient{ get; set; }
         public Guid AppointmentId { get; set; }
