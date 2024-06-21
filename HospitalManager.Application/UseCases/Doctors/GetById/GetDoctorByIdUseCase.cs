@@ -18,6 +18,7 @@ namespace HospitalManager.Application.UseCases.Doctors.GetById
                 throw new NotFoundException("A doctor with this id dont exist.");
             }
 
+
             return new ResponseRegisterDoctorJson
             {
                 Id = entity.Id,

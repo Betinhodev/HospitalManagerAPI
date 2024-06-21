@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HospitalManager.Communication.Requests.Patient
+﻿namespace HospitalManager.Communication.Requests.Patient
 {
     public class RequestPatientJson
     {

@@ -4,11 +4,15 @@ using HospitalManager.Communication.Responses.Patient;
 using HospitalManager.Exceptions;
 using HospitalManager.Infrastructure;
 using HospitalManager.Infrastructure.Entities;
+using HospitalManager.Infrastructure.Services;
+using Microsoft.Extensions.Logging;
 
 namespace HospitalManager.Application.UseCases.Patients.Register
 {
     public class RegisterPatientUseCase
     {
+        private readonly ILogger<RegisterPatientUseCase> logger;
+        PassHasher<Patient> hashedPass = new PassHasher<Patient>();
         public ResponsePatientJson Execute(RequestPatientJson request)
         {
             Validate(request);
@@ -25,6 +29,9 @@ namespace HospitalManager.Application.UseCases.Patients.Register
                 HasCovenant = request.HasCovenant,
                 CovenantId = request.CovenantId,
             };
+
+            var patientPassword = hashedPass.HashPassword(entity, request.Password);
+            entity.Password = patientPassword;
 
             dbContext.Patients.Add(entity);
             dbContext.SaveChanges();

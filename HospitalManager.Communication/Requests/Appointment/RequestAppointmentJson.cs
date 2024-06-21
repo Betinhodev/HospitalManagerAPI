@@ -5,5 +5,6 @@
         public Guid DoctorId { get; set; }
         public DateTime RegisterDate { get; set; }
         public Guid PatientId { get; set; }
+
     }
 }

@@ -3,11 +3,13 @@ using HospitalManager.Communication.Responses.Doctor;
 using HospitalManager.Exceptions;
 using HospitalManager.Infrastructure;
 using HospitalManager.Infrastructure.Entities;
+using HospitalManager.Infrastructure.Services;
 
 namespace HospitalManager.Application.UseCases.Doctors.Register;
 
 public class RegisterDoctorUseCase
     {
+    PassHasher<Doctor> hashedPass = new PassHasher<Doctor>();
         public ResponseRegisterDoctorJson Execute(RequestDoctorJson request)
         {
             Validate(request);
@@ -20,6 +22,8 @@ public class RegisterDoctorUseCase
                 CPF = request.CPF,
                 Password = request.Password
             };
+            var doctorPassword = hashedPass.HashPassword(entity, request.Password);
+            entity.Password = doctorPassword;
 
             dbContext.Doctors.Add(entity);
             dbContext.SaveChanges();

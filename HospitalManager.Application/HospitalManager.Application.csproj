@@ -16,10 +16,13 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="NLog" Version="5.3.2" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="5.3.11" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\HospitalManager.Communication\HospitalManager.Communication.csproj" />
+    <ProjectReference Include="..\HospitalManager.Exceptions\HospitalManager.Exceptions.csproj" />
     <ProjectReference Include="..\HospitalManager.Infrastructure\HospitalManager.Infrastructure.csproj" />
   </ItemGroup>
 
