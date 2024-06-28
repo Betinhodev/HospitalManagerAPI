@@ -1,10 +1,10 @@
 using HospitalManager.API.Filter;
-using Microsoft.OpenApi.Models;
-using System.Reflection;
-using NLog.Web;
-using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using NLog.Web;
+using System.Reflection;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,7 +47,9 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-var key = Encoding.ASCII.GetBytes(HospitalManager.Infrastructure.Services.AuthService.Key.Secret);
+builder.Services.AddHttpContextAccessor();
+
+var key = Encoding.ASCII.GetBytes(HospitalManager.Application.UseCases.Authentication.AuthUseCase.Key.Secret);
 
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
@@ -70,7 +72,6 @@ builder.Services.AddAuthentication(x =>
         ClockSkew = TimeSpan.Zero
     };
 });
-
 
 builder.Logging.ClearProviders();
 builder.Host.UseNLog();

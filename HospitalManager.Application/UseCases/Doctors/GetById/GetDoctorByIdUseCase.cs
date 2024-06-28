@@ -1,6 +1,9 @@
-﻿using HospitalManager.Communication.Responses.Doctor;
+﻿using HospitalManager.Communication.Requests.Doctor;
+using HospitalManager.Communication.Responses.Doctor;
 using HospitalManager.Exceptions;
 using HospitalManager.Infrastructure;
+using HospitalManager.Infrastructure.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace HospitalManager.Application.UseCases.Doctors.GetById
@@ -11,7 +14,7 @@ namespace HospitalManager.Application.UseCases.Doctors.GetById
         {
             var dbContext = new HospitalManagerDbContext();
 
-            var entity = dbContext.Doctors.FirstOrDefault(doctor => doctor.Id == id);
+            var entity = dbContext.Doctors.FirstOrDefault(doctor => doctor.DoctorId == id);
         
             if(entity is null)
             {
@@ -21,9 +24,8 @@ namespace HospitalManager.Application.UseCases.Doctors.GetById
 
             return new ResponseRegisterDoctorJson
             {
-                Id = entity.Id,
-                Name = entity.Name,
-                AppointmentId = entity.AppointmentId
+                Id = entity.DoctorId,
+                Name = entity.Name
             };
         }
     }

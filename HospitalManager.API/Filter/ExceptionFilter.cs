@@ -35,12 +35,17 @@ public class ExceptionFilter : IExceptionFilter
             context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Conflict;
             context.Result = new ConflictObjectResult(new ResponseErrorJson(context.Exception.Message));
         }
+        else if(context.Exception is ErrorOnValidationException)
+        {
+            context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Conflict;
+            context.Result = new ConflictObjectResult(new ResponseErrorJson(context.Exception.Message));
+        }
     }
 
     private void ThrowUnknownError(ExceptionContext context)
     {
         context.HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-        context.Result = new ObjectResult(new ResponseErrorJson("Unknow error"));
+        context.Result = new ObjectResult(new ResponseErrorJson("Unknown error"));
     }
 }
 

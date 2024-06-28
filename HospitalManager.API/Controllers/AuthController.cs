@@ -1,4 +1,5 @@
-﻿using HospitalManager.Communication.Requests.Authentication;
+﻿using HospitalManager.Application.UseCases.Authentication;
+using HospitalManager.Communication.Requests.Authentication;
 using HospitalManager.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,12 +9,10 @@ namespace HospitalManager.API.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly AuthService _authenticationService;
         private readonly ILogger<AuthController> _logger;
 
-        public AuthController(AuthService authenticationService, ILogger<AuthController> logger)
+        public AuthController(ILogger<AuthController> logger)
         {
-            _authenticationService = authenticationService;
             _logger = logger;
         }
 
@@ -21,15 +20,17 @@ namespace HospitalManager.API.Controllers
         public IActionResult Auth([FromForm] RequestAuthJson auth)
         {
 
-            var token = _authenticationService.AuthUser(auth);
+            var useCase = new AuthUseCase();
 
-            if (token == null)
+            var response = useCase.Execute(auth);
+
+            if (response == null)
             {
                 _logger.LogWarning("user or password incorrect.");
                 return BadRequest("user or password incorrect.");
             }
 
-            return Ok(new { token });
+            return Ok(response);
         }
     }
 }

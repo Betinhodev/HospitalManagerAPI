@@ -17,7 +17,7 @@ namespace HospitalManager.Application.UseCases.Appointments.Register
 
             var dbContext = new HospitalManagerDbContext();
 
-            var hasCovenant = dbContext.Patients.Where(p => p.Id == request.PatientId).Any(p => p.HasCovenant == true);
+            var hasCovenant = dbContext.Patients.Where(p => p.PatientId == request.PatientId).Any(p => p.HasCovenant == true);
             decimal value;
 
             if (hasCovenant == false)
@@ -39,8 +39,8 @@ namespace HospitalManager.Application.UseCases.Appointments.Register
             dbContext.Appointments.Add(entity);
             dbContext.SaveChanges();
 
-            string doctorName = dbContext.Doctors.Where(d => d.Id == entity.DoctorId).Select(d => d.Name).FirstOrDefault();
-            string patientName = dbContext.Patients.Where(p => p.Id == entity.PatientId).Select(p => p.Name).FirstOrDefault();
+            string doctorName = dbContext.Doctors.Where(d => d.DoctorId == entity.DoctorId).Select(d => d.Name).FirstOrDefault();
+            string patientName = dbContext.Patients.Where(p => p.PatientId == entity.PatientId).Select(p => p.Name).FirstOrDefault();
 
             return new ResponseAppointmentJson
             {

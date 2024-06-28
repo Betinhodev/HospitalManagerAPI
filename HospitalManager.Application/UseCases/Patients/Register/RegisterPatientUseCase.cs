@@ -12,7 +12,7 @@ namespace HospitalManager.Application.UseCases.Patients.Register
     public class RegisterPatientUseCase
     {
         private readonly ILogger<RegisterPatientUseCase> logger;
-        PassHasher<Patient> hashedPass = new PassHasher<Patient>();
+        PassHasherService<Patient> hashedPass = new PassHasherService<Patient>();
         public ResponsePatientJson Execute(RequestPatientJson request)
         {
             Validate(request);
@@ -38,7 +38,7 @@ namespace HospitalManager.Application.UseCases.Patients.Register
 
             return new ResponsePatientJson
             {
-                Id = entity.Id,
+                Id = entity.PatientId,
                 CPF = request.CPF,
                 Name = request.Name,
                 Address = request.Address,

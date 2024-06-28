@@ -10,7 +10,7 @@ namespace HospitalManager.Application.UseCases.Patients.GetById
         {
             var dbContext = new HospitalManagerDbContext();
 
-            var entity = dbContext.Patients.FirstOrDefault(patient => patient.Id == id);
+            var entity = dbContext.Patients.FirstOrDefault(patient => patient.PatientId == id);
 
             if (entity is null)
             {
@@ -19,7 +19,7 @@ namespace HospitalManager.Application.UseCases.Patients.GetById
 
             return new ResponsePatientJson
             {
-                Id = entity.Id,
+                Id = entity.PatientId,
                 CPF = entity.CPF,
                 Name = entity.Name,
                 Address = entity.Address,

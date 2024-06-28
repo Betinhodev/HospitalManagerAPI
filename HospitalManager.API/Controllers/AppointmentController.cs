@@ -3,6 +3,7 @@ using HospitalManager.Application.UseCases.Appointments.Register;
 using HospitalManager.Communication.Requests.Appointment;
 using HospitalManager.Communication.Responses;
 using HospitalManager.Communication.Responses.Appointment;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HospitalManager.API.Controllers
@@ -18,6 +19,7 @@ namespace HospitalManager.API.Controllers
         /// <returns>IActionResult</returns>
         /// <response code="201">If register suceed.</response>
         /// <response code="400">If register don't suceed.</response>
+        [Authorize(Roles = "doctor, admin")]
         [HttpPost]
         [ProducesResponseType(typeof(ResponseAppointmentJson), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ResponseErrorJson), StatusCodes.Status400BadRequest)]
@@ -37,6 +39,7 @@ namespace HospitalManager.API.Controllers
         /// <returns>IActionResult</returns>
         /// <response code="200">If appointment exists.</response>
         /// <response code="404">If appointment don't exists.</response>
+        [Authorize(Roles = "patient, doctor, admin")]
         [HttpGet]
         [Route("{id}")]
         [ProducesResponseType(typeof(ResponseAppointmentJson), StatusCodes.Status200OK)]

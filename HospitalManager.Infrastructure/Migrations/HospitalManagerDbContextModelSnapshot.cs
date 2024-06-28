@@ -19,20 +19,14 @@ namespace HospitalManager.Infrastructure.Migrations
 
             modelBuilder.Entity("HospitalManager.Infrastructure.Entities.Appointment", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("AppointmentId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("DoctorId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<Guid?>("DoctorId1")
+                    b.Property<Guid>("DoctorId")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("PatientId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<Guid?>("PatientId1")
+                    b.Property<Guid>("PatientId")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("RegisterDate")
@@ -44,20 +38,20 @@ namespace HospitalManager.Infrastructure.Migrations
                     b.Property<decimal>("Value")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                    b.HasKey("AppointmentId");
 
-                    b.HasIndex("DoctorId1");
+                    b.HasIndex("DoctorId");
 
-                    b.HasIndex("PatientId1");
+                    b.HasIndex("PatientId");
 
                     b.ToTable("Appointments");
                 });
 
             modelBuilder.Entity("HospitalManager.Infrastructure.Entities.AppointmentReturn", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("ReturnId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("AppointmentId")
                         .HasColumnType("TEXT");
@@ -65,53 +59,44 @@ namespace HospitalManager.Infrastructure.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("DoctorId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<Guid>("DoctorId1")
+                    b.Property<Guid>("DoctorId")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("PatientId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<Guid?>("PatientId1")
+                    b.Property<Guid>("PatientId")
                         .HasColumnType("TEXT");
 
                     b.Property<int?>("Status")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("Id");
+                    b.HasKey("ReturnId");
 
-                    b.HasIndex("DoctorId1");
+                    b.HasIndex("DoctorId");
 
-                    b.HasIndex("PatientId1");
+                    b.HasIndex("PatientId");
 
                     b.ToTable("AppointmentReturns");
                 });
 
             modelBuilder.Entity("HospitalManager.Infrastructure.Entities.Covenant", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("CovenantId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("CovenantName")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                    b.HasKey("CovenantId");
 
                     b.ToTable("Covenants");
                 });
 
             modelBuilder.Entity("HospitalManager.Infrastructure.Entities.Doctor", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("DoctorId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("AppointmentId")
-                        .HasColumnType("INTEGER");
 
                     b.Property<string>("CPF")
                         .IsRequired()
@@ -129,23 +114,20 @@ namespace HospitalManager.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                    b.HasKey("DoctorId");
 
                     b.ToTable("Doctors");
                 });
 
             modelBuilder.Entity("HospitalManager.Infrastructure.Entities.Patient", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("PatientId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Address")
                         .IsRequired()
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("AppointmentId")
-                        .HasColumnType("INTEGER");
 
                     b.Property<string>("BirthDate")
                         .IsRequired()
@@ -173,7 +155,7 @@ namespace HospitalManager.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                    b.HasKey("PatientId");
 
                     b.ToTable("Patients");
                 });
@@ -181,12 +163,16 @@ namespace HospitalManager.Infrastructure.Migrations
             modelBuilder.Entity("HospitalManager.Infrastructure.Entities.Appointment", b =>
                 {
                     b.HasOne("HospitalManager.Infrastructure.Entities.Doctor", "Doctor")
-                        .WithMany()
-                        .HasForeignKey("DoctorId1");
+                        .WithMany("Appointments")
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("HospitalManager.Infrastructure.Entities.Patient", "Patient")
-                        .WithMany()
-                        .HasForeignKey("PatientId1");
+                        .WithMany("Appointments")
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Doctor");
 
@@ -196,18 +182,34 @@ namespace HospitalManager.Infrastructure.Migrations
             modelBuilder.Entity("HospitalManager.Infrastructure.Entities.AppointmentReturn", b =>
                 {
                     b.HasOne("HospitalManager.Infrastructure.Entities.Doctor", "Doctor")
-                        .WithMany()
-                        .HasForeignKey("DoctorId1")
+                        .WithMany("Returns")
+                        .HasForeignKey("DoctorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("HospitalManager.Infrastructure.Entities.Patient", "Patient")
-                        .WithMany()
-                        .HasForeignKey("PatientId1");
+                        .WithMany("Returns")
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Doctor");
 
                     b.Navigation("Patient");
+                });
+
+            modelBuilder.Entity("HospitalManager.Infrastructure.Entities.Doctor", b =>
+                {
+                    b.Navigation("Appointments");
+
+                    b.Navigation("Returns");
+                });
+
+            modelBuilder.Entity("HospitalManager.Infrastructure.Entities.Patient", b =>
+                {
+                    b.Navigation("Appointments");
+
+                    b.Navigation("Returns");
                 });
 #pragma warning restore 612, 618
         }

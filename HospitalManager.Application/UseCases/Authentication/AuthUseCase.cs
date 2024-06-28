@@ -1,5 +1,7 @@
 ﻿using HospitalManager.Communication.Requests.Authentication;
+using HospitalManager.Infrastructure;
 using HospitalManager.Infrastructure.Entities;
+using HospitalManager.Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -9,56 +11,49 @@ using System.Security.Claims;
 using System.Text;
 
 
-namespace HospitalManager.Infrastructure.Services
+namespace HospitalManager.Application.UseCases.Authentication
 {
-    public class AuthService
+    public class AuthUseCase
     {
-        private readonly IConfiguration _configuration;
-        private readonly HospitalManagerDbContext _context;
-        private readonly ILogger<AuthService> _logger;
-        PassHasher<Patient> hashedPatientPass = new PassHasher<Patient>();
-        PassHasher<Doctor> hashedDoctorPass = new PassHasher<Doctor>();
+        PassHasherService<Patient> hashedPatientPass = new PassHasherService<Patient>();
+        PassHasherService<Doctor> hashedDoctorPass = new PassHasherService<Doctor>();
 
-        public AuthService(IConfiguration configuration, HospitalManagerDbContext context, ILogger<AuthService> logger)
-        {
-            _context = context;
-            _logger = logger;
-            _configuration = configuration;
-        }
 
-        public object AuthUser(RequestAuthJson requestAuth)
+        public object Execute(RequestAuthJson requestAuth)
         {
-            var patient = _context.Patients.FirstOrDefault(patient => patient.CPF == requestAuth.CPF);
-            
-            if(patient != null)
+            var context = new HospitalManagerDbContext();
+
+            var patient = context.Patients.FirstOrDefault(patient => patient.CPF == requestAuth.CPF);
+
+            if (patient != null)
             {
                 var isValidPass = hashedPatientPass.VerifyHashedPassword(patient, patient.Password, requestAuth.Password);
-                if(isValidPass == PasswordVerificationResult.Success)
+                if (isValidPass == PasswordVerificationResult.Success)
                 {
-                    _logger.LogInformation($"Patient {patient.Name} authenticated.");
+                 
                     return GenerateToken(patient.CPF, "patient");
                 }
             }
 
-            var doctor = _context.Doctors.FirstOrDefault(doctor => doctor.CPF == requestAuth.CPF);
+            var doctor = context.Doctors.FirstOrDefault(doctor => doctor.CPF == requestAuth.CPF);
             if (doctor != null)
             {
                 var isValidPass = hashedDoctorPass.VerifyHashedPassword(doctor, doctor.Password, requestAuth.Password);
-                if(isValidPass == PasswordVerificationResult.Success)
+                if (isValidPass == PasswordVerificationResult.Success)
                 {
-                    _logger.LogInformation($"Doctor {doctor.Name} authenticated.");
+                    
                     return GenerateToken(doctor.CPF, "doctor");
                 }
             }
 
-            if(requestAuth.CPF == "admin" && requestAuth.Password == "root")
+            if (requestAuth.CPF == "admin" && requestAuth.Password == "root")
             {
-                _logger.LogInformation("Admin logged in.");
+               
                 return GenerateToken("admin", "admin");
             }
 
             return null;
-            
+
         }
 
         public class Key
@@ -88,5 +83,7 @@ namespace HospitalManager.Infrastructure.Services
                 token = tokenString
             };
         }
+
     }
 }
+

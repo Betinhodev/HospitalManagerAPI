@@ -9,7 +9,7 @@ namespace HospitalManager.Application.UseCases.Doctors.Register;
 
 public class RegisterDoctorUseCase
     {
-    PassHasher<Doctor> hashedPass = new PassHasher<Doctor>();
+        PassHasherService<Doctor> hashedPass = new PassHasherService<Doctor>();
         public ResponseRegisterDoctorJson Execute(RequestDoctorJson request)
         {
             Validate(request);
@@ -30,7 +30,7 @@ public class RegisterDoctorUseCase
 
             return new ResponseRegisterDoctorJson
             {
-                Id = entity.Id
+                Id = entity.DoctorId
             };
         }
 

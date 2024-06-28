@@ -10,7 +10,7 @@ namespace HospitalManager.Infrastructure.Entities
     public class Doctor
     {
         [Key]
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public Guid DoctorId { get; set; } = Guid.NewGuid();
 
         public string CPF { get; set; } = string.Empty;
 
@@ -20,6 +20,8 @@ namespace HospitalManager.Infrastructure.Entities
 
         public string DocImg { get; set; } = string.Empty;
 
-        public Guid AppointmentId { get; set; }
+        public ICollection<Appointment> Appointments { get; set; }
+
+        public ICollection<AppointmentReturn> Returns { get; set; }
     }
 }

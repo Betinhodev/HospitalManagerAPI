@@ -2,7 +2,7 @@
 
 namespace HospitalManager.Infrastructure.Services
 {
-    public class PassHasher<TUser> : PasswordHasher<TUser> where TUser : class
+    public class PassHasherService<TUser> : PasswordHasher<TUser> where TUser : class
     {
         public override string HashPassword(TUser user, string password)
         {
