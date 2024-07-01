@@ -25,20 +25,25 @@ public class ExceptionFilter : IExceptionFilter
 
     private void HandleProjectException(ExceptionContext context)
     {
-        if(context.Exception is NotFoundException)
+        if (context.Exception is NotFoundException)
         {
             context.HttpContext.Response.StatusCode = (int)HttpStatusCode.NotFound;
             context.Result = new BadRequestObjectResult(new ResponseErrorJson(context.Exception.Message));
         }
-        else if(context.Exception is ConflictException)
+        else if (context.Exception is ConflictException)
         {
             context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Conflict;
             context.Result = new ConflictObjectResult(new ResponseErrorJson(context.Exception.Message));
         }
-        else if(context.Exception is ErrorOnValidationException)
+        else if (context.Exception is ErrorOnValidationException)
         {
             context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Conflict;
             context.Result = new ConflictObjectResult(new ResponseErrorJson(context.Exception.Message));
+        }
+        else if (context.Exception is UnauthorizedException)
+        {
+            context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+            context.Result = new UnauthorizedObjectResult(new ResponseErrorJson(context.Exception.Message));
         }
     }
 
