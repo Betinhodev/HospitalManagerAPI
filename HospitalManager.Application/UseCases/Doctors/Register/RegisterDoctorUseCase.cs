@@ -16,12 +16,21 @@ public class RegisterDoctorUseCase
 
             var dbContext = new HospitalManagerDbContext();
 
-            var entity = new Doctor
+            Guid guidDocPatient = Guid.NewGuid();
+            var imgPath = Path.Combine("C:\\Users\\gsnogueira\\source\\repos\\HospitalManager.API\\HospitalManager.API\\Images", $"{guidDocPatient}");
+
+            using (FileStream stream = System.IO.File.Create(imgPath))
             {
-                Name = request.Name,
-                CPF = request.CPF,
-                Password = request.Password
-            };
+                request.imgDoc.CopyToAsync(stream);
+            }
+
+        var entity = new Doctor
+        {
+            Name = request.Name,
+            CPF = request.CPF,
+            Password = request.Password,
+            DocImg = imgPath
+                };
             var doctorPassword = hashedPass.HashPassword(entity, request.Password);
             entity.Password = doctorPassword;
 

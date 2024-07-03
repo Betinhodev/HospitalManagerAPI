@@ -1,8 +1,10 @@
 ﻿using HospitalManager.Application.UseCases.Doctors.GetById;
+using HospitalManager.Application.UseCases.Doctors.GetDocByCpf;
 using HospitalManager.Application.UseCases.Doctors.Register;
 using HospitalManager.Communication.Requests.Doctor;
 using HospitalManager.Communication.Responses;
 using HospitalManager.Communication.Responses.Doctor;
+using HospitalManager.Exceptions;
 using HospitalManager.Infrastructure.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -18,7 +20,7 @@ public class DoctorController : ControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(ResponseRegisterDoctorJson), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ResponseErrorJson), StatusCodes.Status400BadRequest)]
-    public IActionResult Register([FromBody] RequestDoctorJson request)
+    public IActionResult Register([FromForm] RequestDoctorJson request)
     {
         var useCase = new RegisterDoctorUseCase();
 
@@ -42,5 +44,24 @@ public class DoctorController : ControllerBase
         return Ok(response);
     }
 
+    [HttpGet]
+    [Route("getdoc/{cpf}")]
+    [ProducesResponseType(typeof(ResponseDoctorDocJson), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponseErrorJson),StatusCodes.Status404NotFound)]
+    public IActionResult GetDocById([FromRoute]string cpf)
+    {
+        var useCase = new GetDoctorDocByCpfUseCase();
+
+        var request = new RequestDoctorDocJson { CPF = cpf };
+
+        var response = useCase.Execute(request);
+
+        if (response == null || response.imgDoc == null)
+        {
+            throw new ErrorOnValidationException("This doctor don't have doc uploaded.");
+        }
+
+        return File(response.imgDoc, "image/png");
+    }
 }
 

@@ -20,7 +20,7 @@ namespace HospitalManager.Infrastructure.Entities
         public string DocImg { get; set; } = string.Empty;
         public bool HasCovenant { get; set; }
         [ForeignKey("CovenantId")]
-        public int CovenantId { get; set; }
+        public Guid CovenantId { get; set; }
         public ICollection<Appointment> Appointments { get; set; }
         public ICollection<AppointmentReturn> Returns { get; set; }
     }

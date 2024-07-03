@@ -1,15 +1,10 @@
-﻿using HospitalManager.Application.UseCases.Doctors.Register;
-using HospitalManager.Communication.Requests.Doctor;
-using HospitalManager.Communication.Responses.Doctor;
-using HospitalManager.Communication.Responses;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using HospitalManager.Application.UseCases.Covenants.GetById;
 using HospitalManager.Application.UseCases.Covenants.RegisterCovenantUseCase;
 using HospitalManager.Communication.Requests.Covenant;
+using HospitalManager.Communication.Responses;
 using HospitalManager.Communication.Responses.Covenant;
-using HospitalManager.Application.UseCases.Doctors.GetById;
-using HospitalManager.Application.UseCases.Covenants.GetById;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace HospitalManager.API.Controllers
 {

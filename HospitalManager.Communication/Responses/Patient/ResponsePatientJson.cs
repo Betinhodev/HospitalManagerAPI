@@ -8,7 +8,7 @@
         public string Address { get; set; } = string.Empty;
         public string BirthDate { get; set; } = string.Empty;
         public bool HasCovenant { get; set; }
-        public int CovenantId { get; set; }
+        public Guid CovenantId { get; set; }
         public int AppointmentId { get; set; }
     }
 }

@@ -5,6 +5,7 @@ using HospitalManager.Exceptions;
 using HospitalManager.Infrastructure;
 using HospitalManager.Infrastructure.Entities;
 using HospitalManager.Infrastructure.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
 namespace HospitalManager.Application.UseCases.Patients.Register
@@ -19,6 +20,14 @@ namespace HospitalManager.Application.UseCases.Patients.Register
 
             var dbContext = new HospitalManagerDbContext();
 
+            Guid guidDocPatient = Guid.NewGuid();
+            var imgPath = Path.Combine("C:\\Users\\gsnogueira\\source\\repos\\HospitalManager.API\\HospitalManager.API\\Images", $"{guidDocPatient}");
+
+            using (FileStream stream = System.IO.File.Create(imgPath))
+            {
+                request.imgDoc.CopyToAsync(stream);
+            }
+
             var entity = new Patient
             {
                 Name = request.Name,
@@ -28,6 +37,7 @@ namespace HospitalManager.Application.UseCases.Patients.Register
                 BirthDate = request.BirthDate,
                 HasCovenant = request.HasCovenant,
                 CovenantId = request.CovenantId,
+                DocImg = imgPath
             };
 
             var patientPassword = hashedPass.HashPassword(entity, request.Password);
@@ -63,6 +73,10 @@ namespace HospitalManager.Application.UseCases.Patients.Register
             if (string.IsNullOrWhiteSpace(request.Password))
             {
                 throw new ErrorOnValidationException("Password field can't be null.");
+            }
+            if(request.imgDoc == null || request.imgDoc.Length == 0)
+            {
+                throw new ErrorOnValidationException("You need to upload a doc image.");
             }
         }
     }
