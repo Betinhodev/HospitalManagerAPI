@@ -1,6 +1,8 @@
 ﻿using HospitalManager.Application.UseCases.Appointments.GetById;
 using HospitalManager.Application.UseCases.Appointments.Register;
+using HospitalManager.Application.UseCases.Appointments.Update;
 using HospitalManager.Communication.Requests.Appointment;
+using HospitalManager.Communication.Requests.Appointments;
 using HospitalManager.Communication.Responses;
 using HospitalManager.Communication.Responses.Appointment;
 using Microsoft.AspNetCore.Authorization;
@@ -49,6 +51,19 @@ namespace HospitalManager.API.Controllers
             var useCase = new GetAppointmentByIdUseCase();
 
             var response = useCase.Execute(id);
+
+            return Ok(response);
+        }
+
+        [Authorize(Roles = "doctor, admin")]
+        [HttpPut]
+        [ProducesResponseType(typeof(ResponseAppointmentJson), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ResponseErrorJson), StatusCodes.Status404NotFound)]
+        public IActionResult Update([FromForm] RequestUpdateAppointmentJson request)
+        {
+            var useCase = new UpdateAppointmentUseCase();
+
+            var response = useCase.Execute(request);
 
             return Ok(response);
         }

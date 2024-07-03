@@ -14,5 +14,7 @@ namespace HospitalManager.Infrastructure.Entities
         public Guid PatientId { get; set; }
         public virtual Patient Patient { get; set; }
         public decimal Value { get; set; }
+
+        public ICollection<AppointmentReturn> AppointmentReturns { get; set; }
     }
 }

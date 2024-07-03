@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc.Filters;
-using System.Runtime.ExceptionServices;
-using System.Net;
-using Microsoft.AspNetCore.Mvc;
+﻿using HospitalManager.Communication.Responses;
 using HospitalManager.Exceptions;
-using HospitalManager.Communication.Responses;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using System.Net;
 
 namespace HospitalManager.API.Filter;
 

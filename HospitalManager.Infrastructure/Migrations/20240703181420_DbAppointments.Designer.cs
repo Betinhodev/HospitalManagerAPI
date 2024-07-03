@@ -3,6 +3,7 @@ using System;
 using HospitalManager.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HospitalManager.Infrastructure.Migrations
 {
     [DbContext(typeof(HospitalManagerDbContext))]
-    partial class HospitalManagerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240703181420_DbAppointments")]
+    partial class DbAppointments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.6");
@@ -69,8 +72,6 @@ namespace HospitalManager.Infrastructure.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("ReturnId");
-
-                    b.HasIndex("AppointmentId");
 
                     b.HasIndex("DoctorId");
 
@@ -183,12 +184,6 @@ namespace HospitalManager.Infrastructure.Migrations
 
             modelBuilder.Entity("HospitalManager.Infrastructure.Entities.AppointmentReturn", b =>
                 {
-                    b.HasOne("HospitalManager.Infrastructure.Entities.Appointment", null)
-                        .WithMany("AppointmentReturns")
-                        .HasForeignKey("AppointmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("HospitalManager.Infrastructure.Entities.Doctor", "Doctor")
                         .WithMany("Returns")
                         .HasForeignKey("DoctorId")
@@ -204,11 +199,6 @@ namespace HospitalManager.Infrastructure.Migrations
                     b.Navigation("Doctor");
 
                     b.Navigation("Patient");
-                });
-
-            modelBuilder.Entity("HospitalManager.Infrastructure.Entities.Appointment", b =>
-                {
-                    b.Navigation("AppointmentReturns");
                 });
 
             modelBuilder.Entity("HospitalManager.Infrastructure.Entities.Doctor", b =>
