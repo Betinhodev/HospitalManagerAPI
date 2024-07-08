@@ -21,6 +21,7 @@ namespace HospitalManager.Infrastructure.Entities
         public bool HasCovenant { get; set; }
         [ForeignKey(nameof(CovenantId))]
         public Guid CovenantId { get; set; }
+        public virtual Covenant? Covenant { get; set; }
         public ICollection<Appointment> Appointments { get; set; }
         public ICollection<AppointmentReturn> Returns { get; set; }
 

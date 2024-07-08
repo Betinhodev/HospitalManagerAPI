@@ -19,6 +19,7 @@ namespace HospitalManager.Application.UseCases.Appointments.GetById
                 throw new NotFoundException("A appointment with this id dont exist.");
             }
 
+
             string doctorName = dbContext.Doctors.Where(d => d.DoctorId == entity.DoctorId).Select(d => d.Name).FirstOrDefault();
             string patientName = dbContext.Patients.Where(p => p.PatientId == entity.PatientId).Select(p => p.Name).FirstOrDefault();
 
@@ -26,10 +27,15 @@ namespace HospitalManager.Application.UseCases.Appointments.GetById
             {
                 DoctorName = doctorName,
                 PatientName = patientName,
-                RegisterDate = entity.RegisterDate,
+                RegisterDate = entity.ScheduledDate,
                 Status = entity.Status,
                 Value = entity.Value
             };
+        }
+
+        public void Validate()
+        {
+            
         }
     }
 }

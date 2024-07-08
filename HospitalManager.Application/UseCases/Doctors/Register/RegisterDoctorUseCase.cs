@@ -39,7 +39,8 @@ public class RegisterDoctorUseCase
 
             return new ResponseRegisterDoctorJson
             {
-                Id = entity.DoctorId
+                Id = entity.DoctorId,
+                Name = entity.Name
             };
         }
 

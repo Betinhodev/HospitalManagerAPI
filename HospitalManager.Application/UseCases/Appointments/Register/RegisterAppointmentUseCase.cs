@@ -18,19 +18,14 @@ namespace HospitalManager.Application.UseCases.Appointments.Register
             var dbContext = new HospitalManagerDbContext();
 
             var hasCovenant = dbContext.Patients.Where(p => p.PatientId == request.PatientId).Any(p => p.HasCovenant == true);
-            decimal value;
-
-            if (hasCovenant == false)
-                value = 100;
-            else
-                value = 0;
+            decimal value = hasCovenant ? 0 : 100;
             
 
             var entity = new Appointment
             {
                 DoctorId = request.DoctorId,
                 PatientId = request.PatientId,
-                RegisterDate = request.RegisterDate,
+                ScheduledDate = request.ScheduledDate,
                 Status = AppointmentStatus.Scheduled,
                 Value = value
             };
@@ -47,7 +42,7 @@ namespace HospitalManager.Application.UseCases.Appointments.Register
 
                 DoctorName = doctorName,
                 PatientName = patientName,
-                RegisterDate = entity.RegisterDate,
+                RegisterDate = entity.ScheduledDate,
                 Status = entity.Status,
                 Value = value
             };

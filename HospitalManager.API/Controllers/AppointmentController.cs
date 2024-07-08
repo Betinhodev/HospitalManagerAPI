@@ -5,8 +5,12 @@ using HospitalManager.Communication.Requests.Appointment;
 using HospitalManager.Communication.Requests.Appointments;
 using HospitalManager.Communication.Responses;
 using HospitalManager.Communication.Responses.Appointment;
+using HospitalManager.Exceptions;
+using HospitalManager.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace HospitalManager.API.Controllers
 {
@@ -48,10 +52,25 @@ namespace HospitalManager.API.Controllers
         [ProducesResponseType(typeof(ResponseErrorJson), StatusCodes.Status404NotFound)]
         public IActionResult GetById([FromRoute] Guid id)
         {
+
             var useCase = new GetAppointmentByIdUseCase();
 
             var response = useCase.Execute(id);
 
+            var userCpf = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            var dbContext = new HospitalManagerDbContext();
+
+            var appointment = dbContext.Appointments.Include(appointment => appointment.Patient).FirstOrDefault(appointment => appointment.AppointmentId == id);
+
+            if (userCpf == null)
+                throw new ErrorOnValidationException("User is not authenticated");
+            if(appointment == null)
+                throw new NotFoundException("Appointment not found.");
+            if (userRole == "patient" && appointment.Patient.CPF != userCpf)
+                throw new ErrorOnValidationException("You are not authorized to access this appointment.");
             return Ok(response);
         }
 

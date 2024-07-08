@@ -1,7 +1,9 @@
 ﻿using HospitalManager.Communication.Requests.Appointments;
 using HospitalManager.Communication.Responses.Appointments;
+using HospitalManager.Exceptions;
 using HospitalManager.Infrastructure;
 using HospitalManager.Infrastructure.Entities;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +16,21 @@ namespace HospitalManager.Application.UseCases.Appointments.Update
     {
         public ResponseUpdateAppointmentJson Execute(RequestUpdateAppointmentJson request)
         {
+            
+
             var dbContext = new HospitalManagerDbContext();
 
             var entity = dbContext.Appointments.FirstOrDefault(appointment => appointment.AppointmentId == request.AppointmentId);
 
+            if (entity == null)
+            {
+                throw new ErrorOnValidationException("Appointment ID don't exist.");
+            }
+
+            if(request.NeedReturn & request.ScheduledDate == null)
+            {
+                throw new ErrorOnValidationException("You need to set a date to the appointment return.");
+            }
             entity.Status = request.Status;
 
             var appointmentReturn = new AppointmentReturn
@@ -42,5 +55,6 @@ namespace HospitalManager.Application.UseCases.Appointments.Update
                 AppointmentReturnId = appointmentReturn.AppointmentId
             };
         }
+
     }
 }

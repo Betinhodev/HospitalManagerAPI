@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace HospitalManager.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class DBFinal : Migration
+    public partial class Teste5 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,13 +15,12 @@ namespace HospitalManager.Infrastructure.Migrations
                 name: "Covenants",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    CovenantId = table.Column<Guid>(type: "TEXT", nullable: false),
                     CovenantName = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Covenants", x => x.Id);
+                    table.PrimaryKey("PK_Covenants", x => x.CovenantId);
                 });
 
             migrationBuilder.CreateTable(
@@ -51,38 +50,16 @@ namespace HospitalManager.Infrastructure.Migrations
                     BirthDate = table.Column<string>(type: "TEXT", nullable: false),
                     DocImg = table.Column<string>(type: "TEXT", nullable: false),
                     HasCovenant = table.Column<bool>(type: "INTEGER", nullable: false),
-                    CovenantId = table.Column<int>(type: "INTEGER", nullable: false)
+                    CovenantId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Patients", x => x.PatientId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AppointmentReturns",
-                columns: table => new
-                {
-                    ReturnId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    DoctorId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Date = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Status = table.Column<int>(type: "INTEGER", nullable: true),
-                    PatientId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    AppointmentId = table.Column<Guid>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AppointmentReturns", x => x.ReturnId);
                     table.ForeignKey(
-                        name: "FK_AppointmentReturns_Doctors_DoctorId",
-                        column: x => x.DoctorId,
-                        principalTable: "Doctors",
-                        principalColumn: "DoctorId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AppointmentReturns_Patients_PatientId",
-                        column: x => x.PatientId,
-                        principalTable: "Patients",
-                        principalColumn: "PatientId",
+                        name: "FK_Patients_Covenants_CovenantId",
+                        column: x => x.CovenantId,
+                        principalTable: "Covenants",
+                        principalColumn: "CovenantId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -91,7 +68,7 @@ namespace HospitalManager.Infrastructure.Migrations
                 columns: table => new
                 {
                     AppointmentId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    RegisterDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    ScheduledDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Status = table.Column<int>(type: "INTEGER", nullable: true),
                     DoctorId = table.Column<Guid>(type: "TEXT", nullable: false),
                     PatientId = table.Column<Guid>(type: "TEXT", nullable: false),
@@ -114,6 +91,45 @@ namespace HospitalManager.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "AppointmentReturns",
+                columns: table => new
+                {
+                    ReturnId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    DoctorId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ScheduledDate = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    Status = table.Column<int>(type: "INTEGER", nullable: true),
+                    PatientId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    AppointmentId = table.Column<Guid>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppointmentReturns", x => x.ReturnId);
+                    table.ForeignKey(
+                        name: "FK_AppointmentReturns_Appointments_AppointmentId",
+                        column: x => x.AppointmentId,
+                        principalTable: "Appointments",
+                        principalColumn: "AppointmentId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AppointmentReturns_Doctors_DoctorId",
+                        column: x => x.DoctorId,
+                        principalTable: "Doctors",
+                        principalColumn: "DoctorId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AppointmentReturns_Patients_PatientId",
+                        column: x => x.PatientId,
+                        principalTable: "Patients",
+                        principalColumn: "PatientId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppointmentReturns_AppointmentId",
+                table: "AppointmentReturns",
+                column: "AppointmentId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_AppointmentReturns_DoctorId",
                 table: "AppointmentReturns",
@@ -133,6 +149,11 @@ namespace HospitalManager.Infrastructure.Migrations
                 name: "IX_Appointments_PatientId",
                 table: "Appointments",
                 column: "PatientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Patients_CovenantId",
+                table: "Patients",
+                column: "CovenantId");
         }
 
         /// <inheritdoc />
@@ -145,13 +166,13 @@ namespace HospitalManager.Infrastructure.Migrations
                 name: "Appointments");
 
             migrationBuilder.DropTable(
-                name: "Covenants");
-
-            migrationBuilder.DropTable(
                 name: "Doctors");
 
             migrationBuilder.DropTable(
                 name: "Patients");
+
+            migrationBuilder.DropTable(
+                name: "Covenants");
         }
     }
 }

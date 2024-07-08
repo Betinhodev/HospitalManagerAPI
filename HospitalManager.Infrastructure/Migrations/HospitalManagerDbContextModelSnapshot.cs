@@ -29,7 +29,7 @@ namespace HospitalManager.Infrastructure.Migrations
                     b.Property<Guid>("PatientId")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("RegisterDate")
+                    b.Property<DateTime>("ScheduledDate")
                         .HasColumnType("TEXT");
 
                     b.Property<int?>("Status")
@@ -159,6 +159,8 @@ namespace HospitalManager.Infrastructure.Migrations
 
                     b.HasKey("PatientId");
 
+                    b.HasIndex("CovenantId");
+
                     b.ToTable("Patients");
                 });
 
@@ -204,6 +206,17 @@ namespace HospitalManager.Infrastructure.Migrations
                     b.Navigation("Doctor");
 
                     b.Navigation("Patient");
+                });
+
+            modelBuilder.Entity("HospitalManager.Infrastructure.Entities.Patient", b =>
+                {
+                    b.HasOne("HospitalManager.Infrastructure.Entities.Covenant", "Covenant")
+                        .WithMany()
+                        .HasForeignKey("CovenantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Covenant");
                 });
 
             modelBuilder.Entity("HospitalManager.Infrastructure.Entities.Appointment", b =>

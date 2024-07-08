@@ -7,7 +7,7 @@ namespace HospitalManager.Infrastructure.Entities
     {
         [Key]
         public Guid AppointmentId { get; set; } = Guid.NewGuid();
-        public DateTime RegisterDate { get; set; }
+        public DateTime ScheduledDate { get; set; }
         public AppointmentStatus? Status { get; set; }
         public Guid DoctorId { get; set; }
         public virtual Doctor Doctor { get; set; }
