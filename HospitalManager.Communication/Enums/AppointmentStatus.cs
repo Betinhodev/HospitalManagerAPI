@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace HospitalManager.Infrastructure.Enums
+namespace HospitalManager.Communication.Enums
 {
     public enum AppointmentStatus
     {

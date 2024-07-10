@@ -1,4 +1,5 @@
-﻿using HospitalManager.Infrastructure.Enums;
+﻿
+using HospitalManager.Communication.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;

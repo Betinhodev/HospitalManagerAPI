@@ -1,4 +1,4 @@
-﻿using HospitalManager.Infrastructure.Enums;
+﻿using HospitalManager.Communication.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace HospitalManager.Infrastructure.Entities

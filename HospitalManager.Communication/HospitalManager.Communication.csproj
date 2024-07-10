@@ -24,7 +24,6 @@
   <ItemGroup>
     <ProjectReference Include="..\HospitalManager.Exceptions\HospitalManager.Exceptions.csproj" />
 	
-	
   </ItemGroup>
 
 </Project>

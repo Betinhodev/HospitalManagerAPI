@@ -18,7 +18,6 @@ namespace HospitalManager.Application.UseCases.Authentication
         PassHasherService<Patient> hashedPatientPass = new PassHasherService<Patient>();
         PassHasherService<Doctor> hashedDoctorPass = new PassHasherService<Doctor>();
 
-
         public object Execute(RequestAuthJson requestAuth)
         {
             var context = new HospitalManagerDbContext();
@@ -30,7 +29,6 @@ namespace HospitalManager.Application.UseCases.Authentication
                 var isValidPass = hashedPatientPass.VerifyHashedPassword(patient, patient.Password, requestAuth.Password);
                 if (isValidPass == PasswordVerificationResult.Success)
                 {
-                 
                     return GenerateToken(patient.CPF, "patient");
                 }
             }

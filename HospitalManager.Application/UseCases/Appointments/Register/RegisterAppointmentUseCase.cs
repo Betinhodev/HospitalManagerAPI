@@ -5,7 +5,7 @@ using HospitalManager.Infrastructure.Entities;
 using HospitalManager.Infrastructure;
 using HospitalManager.Communication.Responses.Appointment;
 using HospitalManager.Communication.Requests.Appointment;
-using HospitalManager.Infrastructure.Enums;
+using HospitalManager.Communication.Enums;
 
 namespace HospitalManager.Application.UseCases.Appointments.Register
 {

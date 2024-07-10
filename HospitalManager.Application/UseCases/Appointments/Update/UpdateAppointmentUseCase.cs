@@ -40,7 +40,7 @@ namespace HospitalManager.Application.UseCases.Appointments.Update
                 PatientId = entity.PatientId,
                 AppointmentId = entity.AppointmentId,
                 ScheduledDate = request.ScheduledDate,
-                Status = Infrastructure.Enums.AppointmentStatus.Scheduled
+                Status = Communication.Enums.AppointmentStatus.Scheduled
             };
 
             if (request.NeedReturn == true)

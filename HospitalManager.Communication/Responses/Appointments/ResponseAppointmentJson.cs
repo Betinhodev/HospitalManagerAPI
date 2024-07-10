@@ -1,9 +1,5 @@
-﻿using HospitalManager.Infrastructure.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using HospitalManager.Communication.Enums;
 
 namespace HospitalManager.Communication.Responses.Appointment
 {

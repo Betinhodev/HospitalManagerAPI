@@ -2,7 +2,7 @@
 using HospitalManager.Communication.Responses.Doctor;
 using HospitalManager.Exceptions;
 using HospitalManager.Infrastructure;
-using HospitalManager.Infrastructure.Enums;
+using HospitalManager.Communication.Enums;
 
 namespace HospitalManager.Application.UseCases.Appointments.GetById
 {

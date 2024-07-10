@@ -29,7 +29,7 @@ namespace HospitalManager.API.Controllers
                 _logger.LogWarning("user or password incorrect.");
                 return BadRequest("user or password incorrect.");
             }
-
+            _logger.LogInformation($"User - {auth.CPF} logged in.");
             return Ok(response);
         }
     }
