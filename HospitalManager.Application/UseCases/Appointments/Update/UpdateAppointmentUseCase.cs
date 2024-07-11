@@ -1,4 +1,5 @@
-﻿using HospitalManager.Communication.Requests.Appointments;
+﻿using HospitalManager.Communication.Enums;
+using HospitalManager.Communication.Requests.Appointments;
 using HospitalManager.Communication.Responses.Appointments;
 using HospitalManager.Exceptions;
 using HospitalManager.Infrastructure;
@@ -32,6 +33,7 @@ namespace HospitalManager.Application.UseCases.Appointments.Update
                 throw new ErrorOnValidationException("You need to set a date to the appointment return.");
             }
             entity.Status = request.Status;
+            
 
             var appointmentReturn = new AppointmentReturn
             {
@@ -46,6 +48,24 @@ namespace HospitalManager.Application.UseCases.Appointments.Update
             if (request.NeedReturn == true)
             {
                 dbContext.AppointmentReturns.Add(appointmentReturn);
+            }
+
+            var doctorName = dbContext.Doctors.Where(dn => dn.DoctorId == entity.DoctorId).Select(dn => dn.Name).FirstOrDefault();
+            var patientName = dbContext.Patients.Where(pn => pn.PatientId == entity.PatientId).Select(pn => pn.Name).FirstOrDefault();
+
+            if (request.Status == AppointmentStatus.Completed)
+            {
+                var reportCreate = new Report
+                {
+                    AppointmentId = entity.AppointmentId,
+                    Description = request.Description,
+                    ExamType = request.ExamType,
+                    DoctorName = doctorName,
+                    PatientName = patientName,
+                    ReportId = new Guid()
+                };
+
+                dbContext.Reports.Add(reportCreate);
             }
 
              dbContext.SaveChanges();

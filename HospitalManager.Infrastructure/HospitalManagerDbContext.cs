@@ -11,6 +11,7 @@ namespace HospitalManager.Infrastructure
         public DbSet<Appointment> Appointments{ get; set; }
         public DbSet<AppointmentReturn> AppointmentReturns{ get; set; }
         public DbSet<Covenant> Covenants{ get; set; }
+        public DbSet<Report> Reports { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

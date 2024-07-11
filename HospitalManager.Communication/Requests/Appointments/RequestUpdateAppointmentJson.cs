@@ -14,5 +14,8 @@ namespace HospitalManager.Communication.Requests.Appointments
         public AppointmentStatus Status { get; set; }
         public bool NeedReturn { get; set; }
         public DateTime? ScheduledDate { get; set; }
+        public string Description { get; set; } = string.Empty;
+
+        public ExamType ExamType { get; set; }
     }
 }

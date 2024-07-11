@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HospitalManager.API", "HospitalManager.API\HospitalManager.API.csproj", "{9F4A34C1-E5C2-45D8-8F45-7B9EB99D081E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HospitalManager.Api", "HospitalManager.API\HospitalManager.Api.csproj", "{9F4A34C1-E5C2-45D8-8F45-7B9EB99D081E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HospitalManager.Exceptions", "HospitalManager.Exceptions\HospitalManager.Exceptions.csproj", "{2CDB2A43-1B59-4A9D-BDEA-8D8DD8D027DA}"
 EndProject
