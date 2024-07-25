@@ -1,27 +1,31 @@
 ﻿using HospitalManager.Communication.Responses.Appointment;
-using HospitalManager.Communication.Responses.Doctor;
 using HospitalManager.Exceptions;
-using HospitalManager.Infrastructure;
-using HospitalManager.Communication.Enums;
+using HospitalManager.Infrastructure.Repositories;
 
 namespace HospitalManager.Application.UseCases.Appointments.GetById
 {
     public class GetAppointmentByIdUseCase
     {
+        private readonly IAppointmentRepository _appointmentRepository;
+        private readonly IPatientRepository _patientRepository;
+        private readonly IDoctorRepository _doctorRepository;
+
+        public GetAppointmentByIdUseCase(IAppointmentRepository appointmentRepository)
+        {
+            _appointmentRepository = appointmentRepository;
+        }
         public ResponseAppointmentJson Execute(Guid id)
         {
-            var dbContext = new HospitalManagerDbContext();
 
-            var entity = dbContext.Appointments.FirstOrDefault(appointment => appointment.AppointmentId == id);
+            var entity = _appointmentRepository.GetById(id);
 
             if (entity is null)
             {
                 throw new NotFoundException("A appointment with this id dont exist.");
             }
 
-
-            string doctorName = dbContext.Doctors.Where(d => d.DoctorId == entity.DoctorId).Select(d => d.Name).FirstOrDefault();
-            string patientName = dbContext.Patients.Where(p => p.PatientId == entity.PatientId).Select(p => p.Name).FirstOrDefault();
+            string doctorName = _doctorRepository.GetDoctorName(id);
+            string patientName = _patientRepository.GetPatientName(id);
 
             return new ResponseAppointmentJson
             {
@@ -31,11 +35,6 @@ namespace HospitalManager.Application.UseCases.Appointments.GetById
                 Status = entity.Status,
                 Value = entity.Value
             };
-        }
-
-        public void Validate()
-        {
-            
         }
     }
 }

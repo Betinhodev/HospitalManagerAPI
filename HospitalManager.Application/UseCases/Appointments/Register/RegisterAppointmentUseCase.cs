@@ -1,25 +1,33 @@
-﻿using HospitalManager.Communication.Requests.Doctor;
-using HospitalManager.Communication.Responses.Doctor;
-using HospitalManager.Exceptions;
-using HospitalManager.Infrastructure.Entities;
-using HospitalManager.Infrastructure;
-using HospitalManager.Communication.Responses.Appointment;
+﻿using HospitalManager.Communication.Enums;
 using HospitalManager.Communication.Requests.Appointment;
-using HospitalManager.Communication.Enums;
+using HospitalManager.Communication.Responses.Appointment;
+using HospitalManager.Infrastructure;
+using HospitalManager.Infrastructure.Entities;
+using HospitalManager.Infrastructure.Repositories;
 
 namespace HospitalManager.Application.UseCases.Appointments.Register
 {
     public class RegisterAppointmentUseCase
     {
+        private readonly IPatientRepository _patientRepository;
+        private readonly IDoctorRepository _doctorRepository;
+        private readonly IAppointmentRepository _appointmentRepository;
+
+        public RegisterAppointmentUseCase(IPatientRepository patientRepository, IAppointmentRepository appointmentRepository, IDoctorRepository doctorRepository)
+        {
+            _patientRepository = patientRepository;
+            _appointmentRepository = appointmentRepository;
+            _doctorRepository = doctorRepository;
+
+        }
+
         public ResponseAppointmentJson Execute(RequestAppointmentJson request)
         {
             Validate(request);
 
-            var dbContext = new HospitalManagerDbContext();
-
-            var hasCovenant = dbContext.Patients.Where(p => p.PatientId == request.PatientId).Any(p => p.HasCovenant == true);
+            var hasCovenant = _patientRepository.hasCovenant(request.PatientId);
             decimal value = hasCovenant ? 0 : 100;
-            
+
 
             var entity = new Appointment
             {
@@ -30,16 +38,14 @@ namespace HospitalManager.Application.UseCases.Appointments.Register
                 Value = value
             };
 
+            _appointmentRepository.Add(entity);
 
-            dbContext.Appointments.Add(entity);
-            dbContext.SaveChanges();
 
-            string doctorName = dbContext.Doctors.Where(d => d.DoctorId == entity.DoctorId).Select(d => d.Name).FirstOrDefault();
-            string patientName = dbContext.Patients.Where(p => p.PatientId == entity.PatientId).Select(p => p.Name).FirstOrDefault();
+            string doctorName = _doctorRepository.GetDoctorName(request.PatientId);
+            string patientName = _patientRepository.GetPatientName(request.PatientId);
 
             return new ResponseAppointmentJson
             {
-
                 DoctorName = doctorName,
                 PatientName = patientName,
                 RegisterDate = entity.ScheduledDate,
@@ -50,7 +56,6 @@ namespace HospitalManager.Application.UseCases.Appointments.Register
 
         private void Validate(RequestAppointmentJson request)
         {
-            var dbContext = new HospitalManagerDbContext();
         }
     }
 }

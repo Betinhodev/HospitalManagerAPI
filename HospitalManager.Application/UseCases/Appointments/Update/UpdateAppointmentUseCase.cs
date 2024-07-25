@@ -4,6 +4,7 @@ using HospitalManager.Communication.Responses.Appointments;
 using HospitalManager.Exceptions;
 using HospitalManager.Infrastructure;
 using HospitalManager.Infrastructure.Entities;
+using HospitalManager.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -15,13 +16,28 @@ namespace HospitalManager.Application.UseCases.Appointments.Update
 {
     public class UpdateAppointmentUseCase
     {
-        public ResponseUpdateAppointmentJson Execute(RequestUpdateAppointmentJson request)
+        private readonly IAppointmentRepository _appointmentRepository;
+        private readonly IAppointmentReturnRepository _appointmentReturnRepository;
+        private readonly IDoctorRepository _doctorRepository;
+        private readonly IPatientRepository _patientRepository;
+        private readonly IReportRepository _reportRepository;
+        public UpdateAppointmentUseCase(IReportRepository reportRepository, IAppointmentRepository appointmentRepository, IAppointmentReturnRepository appointmentReturnRepository, IDoctorRepository doctorRepository, IPatientRepository patientRepository)
         {
-            
+            _reportRepository = reportRepository;
+            _appointmentRepository = appointmentRepository;
+            _appointmentReturnRepository = appointmentReturnRepository;
+            _doctorRepository = doctorRepository;
+            _patientRepository = patientRepository;
+        }
+        public ResponseUpdateAppointmentJson Execute(RequestUpdateAppointmentJson request)
+        { 
 
-            var dbContext = new HospitalManagerDbContext();
+            var entity = _appointmentRepository.GetById(request.AppointmentId);
 
-            var entity = dbContext.Appointments.FirstOrDefault(appointment => appointment.AppointmentId == request.AppointmentId);
+            if((DateTime.Now - entity.ScheduledDate).Days > 30)
+            {
+                throw new ErrorOnValidationException("You can't open an Appointment Return after 30 days.");
+            }
 
             if (entity == null)
             {
@@ -35,6 +51,7 @@ namespace HospitalManager.Application.UseCases.Appointments.Update
             entity.Status = request.Status;
             
 
+
             var appointmentReturn = new AppointmentReturn
             {
                 ReturnId = new Guid(),
@@ -42,16 +59,16 @@ namespace HospitalManager.Application.UseCases.Appointments.Update
                 PatientId = entity.PatientId,
                 AppointmentId = entity.AppointmentId,
                 ScheduledDate = request.ScheduledDate,
-                Status = Communication.Enums.AppointmentStatus.Scheduled
+                Status = AppointmentStatus.Scheduled
             };
 
             if (request.NeedReturn == true)
             {
-                dbContext.AppointmentReturns.Add(appointmentReturn);
+                _appointmentReturnRepository.Add(appointmentReturn);
             }
 
-            var doctorName = dbContext.Doctors.Where(dn => dn.DoctorId == entity.DoctorId).Select(dn => dn.Name).FirstOrDefault();
-            var patientName = dbContext.Patients.Where(pn => pn.PatientId == entity.PatientId).Select(pn => pn.Name).FirstOrDefault();
+            var doctorName = _doctorRepository.GetDoctorName(entity.DoctorId);
+            var patientName = _patientRepository.GetPatientName(entity.PatientId);
 
             if (request.Status == AppointmentStatus.Completed)
             {
@@ -64,11 +81,10 @@ namespace HospitalManager.Application.UseCases.Appointments.Update
                     PatientName = patientName,
                     ReportId = new Guid()
                 };
-
-                dbContext.Reports.Add(reportCreate);
+                _reportRepository.Add(reportCreate);
             }
 
-             dbContext.SaveChanges();
+
 
             return new ResponseUpdateAppointmentJson
             {
