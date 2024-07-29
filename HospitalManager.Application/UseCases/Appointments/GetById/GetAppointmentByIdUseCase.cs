@@ -1,6 +1,6 @@
 ﻿using HospitalManager.Communication.Responses.Appointment;
 using HospitalManager.Exceptions;
-using HospitalManager.Infrastructure.Repositories;
+using HospitalManager.Infrastructure.Repositories.Interfaces;
 
 namespace HospitalManager.Application.UseCases.Appointments.GetById
 {

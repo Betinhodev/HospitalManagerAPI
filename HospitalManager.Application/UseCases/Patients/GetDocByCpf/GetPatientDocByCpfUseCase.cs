@@ -3,6 +3,7 @@ using HospitalManager.Communication.Responses.Patient;
 using HospitalManager.Exceptions;
 using HospitalManager.Infrastructure;
 using HospitalManager.Infrastructure.Entities;
+using HospitalManager.Infrastructure.Repositories.Interfaces;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -14,11 +15,14 @@ namespace HospitalManager.Application.UseCases.Patients.GetDocByCpf
 {
     public class GetPatientDocByCpfUseCase
     {
+        private readonly IPatientRepository _patientRepository;
+        public GetPatientDocByCpfUseCase(IPatientRepository patientRepository)
+        {
+            _patientRepository = patientRepository;
+        }
         public ResponsePatientDocJson Execute(RequestPatientDocJson request)
         {
-            var dbContext = new HospitalManagerDbContext();
-
-            var entity = dbContext.Patients.FirstOrDefault(patient => patient.CPF == request.CPF);
+            var entity = _patientRepository.GetByCpf(request.CPF);
 
             if(entity == null)
             {

@@ -1,4 +1,13 @@
 using HospitalManager.API.Filter;
+using HospitalManager.Application.UseCases.Appointments.GetById;
+using HospitalManager.Application.UseCases.Appointments.Register;
+using HospitalManager.Application.UseCases.Appointments.Update;
+using HospitalManager.Application.UseCases.Patients.GetById;
+using HospitalManager.Application.UseCases.Patients.GetDocByCpf;
+using HospitalManager.Application.UseCases.Patients.Register;
+using HospitalManager.Infrastructure;
+using HospitalManager.Infrastructure.Repositories;
+using HospitalManager.Infrastructure.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -7,6 +16,24 @@ using System.Reflection;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<HospitalManagerDbContext>();
+
+builder.Services.AddScoped<IPatientRepository, PatientRepository>();
+builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
+builder.Services.AddScoped<IReportRepository, ReportRepository>();
+builder.Services.AddScoped<IAppointmentReturnRepository, AppointmentReturnRepository>();
+builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+
+builder.Services.AddScoped<RegisterAppointmentUseCase>();
+builder.Services.AddScoped<GetAppointmentByIdUseCase>();
+builder.Services.AddScoped<UpdateAppointmentUseCase>();
+builder.Services.AddScoped<RegisterPatientUseCase>();
+builder.Services.AddScoped<GetPatientByIdUseCase>();
+builder.Services.AddScoped<GetPatientDocByCpfUseCase>();
+
+
+
 
 builder.Services.AddControllers();
 

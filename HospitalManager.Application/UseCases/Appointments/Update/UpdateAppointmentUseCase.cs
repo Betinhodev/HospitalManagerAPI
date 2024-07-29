@@ -4,7 +4,7 @@ using HospitalManager.Communication.Responses.Appointments;
 using HospitalManager.Exceptions;
 using HospitalManager.Infrastructure;
 using HospitalManager.Infrastructure.Entities;
-using HospitalManager.Infrastructure.Repositories;
+using HospitalManager.Infrastructure.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;

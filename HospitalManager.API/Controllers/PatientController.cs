@@ -5,8 +5,6 @@ using HospitalManager.Communication.Requests.Patient;
 using HospitalManager.Communication.Responses;
 using HospitalManager.Communication.Responses.Patient;
 using HospitalManager.Exceptions;
-using HospitalManager.Infrastructure;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HospitalManager.API.Controllers
@@ -15,12 +13,24 @@ namespace HospitalManager.API.Controllers
     [ApiController]
     public class PatientController : ControllerBase
     {
+        private readonly GetPatientByIdUseCase _getPatientByIdUseCase;
+        private readonly GetPatientDocByCpfUseCase _getPatientDocByCpfUseCase;
+        private readonly RegisterPatientUseCase _registerPatientUseCase;
+
+        public PatientController(GetPatientByIdUseCase getPatientByIdUseCase, GetPatientDocByCpfUseCase getPatientDocByCpfUseCase, RegisterPatientUseCase registerPatientUseCase)
+        {
+            _getPatientByIdUseCase = getPatientByIdUseCase;
+            _getPatientDocByCpfUseCase = getPatientDocByCpfUseCase;
+            _registerPatientUseCase = registerPatientUseCase;
+
+        }
+
         [HttpPost]
         [ProducesResponseType(typeof(ResponsePatientJson), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ResponseErrorJson), StatusCodes.Status400BadRequest)]
         public IActionResult Register([FromForm] RequestPatientJson request)
         {
-            var useCase = new RegisterPatientUseCase();
+            var useCase = _registerPatientUseCase;
 
             var response = useCase.Execute(request);
 
@@ -33,7 +43,7 @@ namespace HospitalManager.API.Controllers
         [ProducesResponseType(typeof(ResponseErrorJson), StatusCodes.Status404NotFound)]
         public IActionResult GetById([FromRoute] Guid id)
         {
-            var useCase = new GetPatientByIdUseCase();
+            var useCase = _getPatientByIdUseCase;
 
             var response = useCase.Execute(id);
 
@@ -46,7 +56,7 @@ namespace HospitalManager.API.Controllers
         [ProducesResponseType(typeof(ResponseErrorJson), StatusCodes.Status404NotFound)]
         public IActionResult GetPatientDocByCpf([FromRoute]string cpf)
         {
-            var useCase = new GetPatientDocByCpfUseCase();
+            var useCase = _getPatientDocByCpfUseCase;
 
             var request = new RequestPatientDocJson { CPF = cpf };
 

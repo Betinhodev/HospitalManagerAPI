@@ -4,6 +4,8 @@ using HospitalManager.Communication.Responses.Patient;
 using HospitalManager.Exceptions;
 using HospitalManager.Infrastructure;
 using HospitalManager.Infrastructure.Entities;
+using HospitalManager.Infrastructure.Repositories;
+using HospitalManager.Infrastructure.Repositories.Interfaces;
 using HospitalManager.Infrastructure.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -13,12 +15,16 @@ namespace HospitalManager.Application.UseCases.Patients.Register
     public class RegisterPatientUseCase
     {
         private readonly ILogger<RegisterPatientUseCase> logger;
+        private readonly IPatientRepository _patientRepository;
         PassHasherService<Patient> hashedPass = new PassHasherService<Patient>();
+
+        public RegisterPatientUseCase(IPatientRepository patientRepository)
+        {
+            _patientRepository = patientRepository;
+        }
         public ResponsePatientJson Execute(RequestPatientJson request)
         {
-            Validate(request);
-
-            var dbContext = new HospitalManagerDbContext();
+            _patientRepository.Validate(request);
 
             Guid guidDocPatient = Guid.NewGuid();
             var imgPath = Path.Combine("C:\\Users\\gsnogueira\\source\\repos\\HospitalManager.API\\HospitalManager.API\\Images", $"{guidDocPatient}");
@@ -43,8 +49,7 @@ namespace HospitalManager.Application.UseCases.Patients.Register
             var patientPassword = hashedPass.HashPassword(entity, request.Password);
             entity.Password = patientPassword;
 
-            dbContext.Patients.Add(entity);
-            dbContext.SaveChanges();
+            _patientRepository.Add(entity);
 
             return new ResponsePatientJson
             {
@@ -58,26 +63,6 @@ namespace HospitalManager.Application.UseCases.Patients.Register
             };
         }
 
-        private void Validate(RequestPatientJson request)
-        {
-            var dbContext = new HospitalManagerDbContext();
-
-            if (dbContext.Patients.Any(patient => patient.CPF == request.CPF))
-            {
-                throw new ErrorOnValidationException("The CPF already exists in the database");
-            }
-            if (string.IsNullOrWhiteSpace(request.Name))
-            {
-                throw new ErrorOnValidationException("Name field can't be null.");
-            }
-            if (string.IsNullOrWhiteSpace(request.Password))
-            {
-                throw new ErrorOnValidationException("Password field can't be null.");
-            }
-            if(request.imgDoc == null || request.imgDoc.Length == 0)
-            {
-                throw new ErrorOnValidationException("You need to upload a doc image.");
-            }
-        }
+        
     }
 }

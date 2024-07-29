@@ -1,4 +1,5 @@
 ﻿using HospitalManager.Infrastructure.Entities;
+using HospitalManager.Infrastructure.Repositories.Interfaces;
 
 namespace HospitalManager.Infrastructure.Repositories
 {
@@ -14,6 +15,11 @@ namespace HospitalManager.Infrastructure.Repositories
         {
             _context.Appointments.Add(appointment);
             _context.SaveChanges();
+        }
+
+        public Appointment GetById(Guid appointmentId)
+        {
+            return _context.Appointments.FirstOrDefault(a => a.AppointmentId == appointmentId);
         }
     }
 }

@@ -18,6 +18,18 @@ namespace HospitalManager.API.Controllers
     [ApiController]
     public class AppointmentController : ControllerBase
     {
+        private readonly RegisterAppointmentUseCase _registerAppointmentUseCase;
+        private readonly GetAppointmentByIdUseCase _getAppointmentByIdUseCase;
+        private readonly UpdateAppointmentUseCase _updateAppointmentUseCase;
+
+        public AppointmentController(RegisterAppointmentUseCase registerAppointmentUseCase, GetAppointmentByIdUseCase getAppointmentByIdUseCase, UpdateAppointmentUseCase updateAppointmentUseCase)
+        {
+            _registerAppointmentUseCase = registerAppointmentUseCase;
+            _getAppointmentByIdUseCase = getAppointmentByIdUseCase;
+            _updateAppointmentUseCase = updateAppointmentUseCase;
+
+        }
+
         /// <summary>
         /// register a new appointment with date, patient and a doctor.
         /// </summary>
@@ -31,9 +43,7 @@ namespace HospitalManager.API.Controllers
         [ProducesResponseType(typeof(ResponseErrorJson), StatusCodes.Status400BadRequest)]
         public IActionResult Register([FromBody] RequestAppointmentJson request)
         {
-            var useCase = new RegisterAppointmentUseCase();
-
-            var response = useCase.Execute(request);
+            var response = _registerAppointmentUseCase.Execute(request);
 
             return Created(string.Empty, response);
         }
@@ -53,9 +63,7 @@ namespace HospitalManager.API.Controllers
         public IActionResult GetById([FromRoute] Guid id)
         {
 
-            var useCase = new GetAppointmentByIdUseCase();
-
-            var response = useCase.Execute(id);
+            var response = _getAppointmentByIdUseCase.Execute(id);
 
             var userCpf = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
@@ -80,7 +88,7 @@ namespace HospitalManager.API.Controllers
         [ProducesResponseType(typeof(ResponseErrorJson), StatusCodes.Status404NotFound)]
         public IActionResult Update([FromForm] RequestUpdateAppointmentJson request)
         {
-            var useCase = new UpdateAppointmentUseCase();
+            var useCase = _updateAppointmentUseCase;
 
             var response = useCase.Execute(request);
 

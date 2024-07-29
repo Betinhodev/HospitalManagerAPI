@@ -3,7 +3,7 @@ using HospitalManager.Communication.Requests.Appointment;
 using HospitalManager.Communication.Responses.Appointment;
 using HospitalManager.Infrastructure;
 using HospitalManager.Infrastructure.Entities;
-using HospitalManager.Infrastructure.Repositories;
+using HospitalManager.Infrastructure.Repositories.Interfaces;
 
 namespace HospitalManager.Application.UseCases.Appointments.Register
 {

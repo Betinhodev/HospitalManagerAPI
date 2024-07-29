@@ -1,16 +1,21 @@
 ﻿using HospitalManager.Communication.Responses.Patient;
 using HospitalManager.Exceptions;
 using HospitalManager.Infrastructure;
+using HospitalManager.Infrastructure.Repositories.Interfaces;
 
 namespace HospitalManager.Application.UseCases.Patients.GetById
 {
     public class GetPatientByIdUseCase
     {
-        public ResponsePatientJson Execute(Guid id)
-        {
-            var dbContext = new HospitalManagerDbContext();
+        private readonly IPatientRepository _patientRepository;
 
-            var entity = dbContext.Patients.FirstOrDefault(patient => patient.PatientId == id);
+        public GetPatientByIdUseCase(IPatientRepository patientRepository)
+        {
+            _patientRepository = patientRepository;
+        }
+        public ResponsePatientJson Execute(Guid id)
+        { 
+            var entity = _patientRepository.GetById(id);
 
             if (entity is null)
             {
