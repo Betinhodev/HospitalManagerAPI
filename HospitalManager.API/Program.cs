@@ -2,6 +2,11 @@ using HospitalManager.API.Filter;
 using HospitalManager.Application.UseCases.Appointments.GetById;
 using HospitalManager.Application.UseCases.Appointments.Register;
 using HospitalManager.Application.UseCases.Appointments.Update;
+using HospitalManager.Application.UseCases.Covenants.GetById;
+using HospitalManager.Application.UseCases.Covenants.RegisterCovenantUseCase;
+using HospitalManager.Application.UseCases.Doctors.GetById;
+using HospitalManager.Application.UseCases.Doctors.GetRelatedAppointments;
+using HospitalManager.Application.UseCases.Doctors.Register;
 using HospitalManager.Application.UseCases.Patients.GetById;
 using HospitalManager.Application.UseCases.Patients.GetDocByCpf;
 using HospitalManager.Application.UseCases.Patients.Register;
@@ -31,6 +36,11 @@ builder.Services.AddScoped<UpdateAppointmentUseCase>();
 builder.Services.AddScoped<RegisterPatientUseCase>();
 builder.Services.AddScoped<GetPatientByIdUseCase>();
 builder.Services.AddScoped<GetPatientDocByCpfUseCase>();
+builder.Services.AddScoped<GetDoctorByIdUseCase>();
+builder.Services.AddScoped<GetRelatedAppointmentsUseCase>();
+builder.Services.AddScoped<RegisterDoctorUseCase>();
+builder.Services.AddScoped<GetCovenantByIdUseCase>();
+builder.Services.AddScoped<RegisterCovenantUseCase>();
 
 
 

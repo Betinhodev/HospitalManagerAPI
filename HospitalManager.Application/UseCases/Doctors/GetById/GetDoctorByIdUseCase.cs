@@ -2,6 +2,7 @@
 using HospitalManager.Communication.Responses.Doctor;
 using HospitalManager.Exceptions;
 using HospitalManager.Infrastructure;
+using HospitalManager.Infrastructure.Repositories.Interfaces;
 using HospitalManager.Infrastructure.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -10,11 +11,15 @@ namespace HospitalManager.Application.UseCases.Doctors.GetById
 {
     public class GetDoctorByIdUseCase
     {
+        private readonly IDoctorRepository _doctorRepository;
+        public GetDoctorByIdUseCase(IDoctorRepository doctorRepository)
+        {
+            _doctorRepository = doctorRepository;
+        }
         public ResponseRegisterDoctorJson Execute(Guid id)
         {
-            var dbContext = new HospitalManagerDbContext();
 
-            var entity = dbContext.Doctors.FirstOrDefault(doctor => doctor.DoctorId == id);
+            var entity = _doctorRepository.GetById(id);
         
             if(entity is null)
             {

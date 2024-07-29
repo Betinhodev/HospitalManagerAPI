@@ -1,8 +1,10 @@
 ﻿using HospitalManager.Communication.Requests.Authentication;
 using HospitalManager.Infrastructure;
 using HospitalManager.Infrastructure.Entities;
+using HospitalManager.Infrastructure.Repositories.Interfaces;
 using HospitalManager.Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -15,12 +17,20 @@ namespace HospitalManager.Application.UseCases.Authentication
     {
         PassHasherService<Patient> hashedPatientPass = new PassHasherService<Patient>();
         PassHasherService<Doctor> hashedDoctorPass = new PassHasherService<Doctor>();
+        private readonly IPatientRepository _patientRepository;
+        private readonly IDoctorRepository _doctorRepository;
 
+        public AuthUseCase(IPatientRepository patientRepository, IDoctorRepository doctorRepository)
+        {
+            _patientRepository = patientRepository;
+            _doctorRepository = doctorRepository;
+
+        }
         public object Execute(RequestAuthJson requestAuth)
         {
             var context = new HospitalManagerDbContext();
 
-            var patient = context.Patients.FirstOrDefault(patient => patient.CPF == requestAuth.CPF);
+            var patient = _patientRepository.GetByCpf(requestAuth.CPF);
 
             if (patient != null)
             {
@@ -31,7 +41,7 @@ namespace HospitalManager.Application.UseCases.Authentication
                 }
             }
 
-            var doctor = context.Doctors.FirstOrDefault(doctor => doctor.CPF == requestAuth.CPF);
+            var doctor = _doctorRepository.GetByCpf(requestAuth.CPF);
             if (doctor != null)
             {
                 var isValidPass = hashedDoctorPass.VerifyHashedPassword(doctor, doctor.Password, requestAuth.Password);

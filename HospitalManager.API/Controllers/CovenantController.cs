@@ -12,13 +12,21 @@ namespace HospitalManager.API.Controllers
     [ApiController]
     public class CovenantController : ControllerBase
     {
+        private readonly RegisterCovenantUseCase _registerCovenantUseCase;
+        private readonly GetCovenantByIdUseCase _getCovenantByIdUseCase;
+        public CovenantController(RegisterCovenantUseCase registerCovenantUseCase, GetCovenantByIdUseCase getCovenantByIdUseCase)
+        {
+            _registerCovenantUseCase = registerCovenantUseCase;
+            _getCovenantByIdUseCase = getCovenantByIdUseCase;
+
+        }
         [Authorize(Roles = "admin")]
         [HttpPost]
         [ProducesResponseType(typeof(ResponseCovenantJson), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ResponseErrorJson), StatusCodes.Status400BadRequest)]
         public IActionResult Register([FromBody] RequestCovenantJson request)
         {
-            var useCase = new RegisterCovenantUseCase();
+            var useCase = _registerCovenantUseCase;
 
             var response = useCase.Execute(request);
 
@@ -32,7 +40,7 @@ namespace HospitalManager.API.Controllers
         [ProducesResponseType(typeof(ResponseErrorJson), StatusCodes.Status404NotFound)]
         public IActionResult GetById([FromRoute] Guid id)
         {
-            var useCase = new GetCovenantByIdUseCase();
+            var useCase = _getCovenantByIdUseCase;
 
             var response = useCase.Execute(id);
 

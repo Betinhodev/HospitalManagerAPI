@@ -10,17 +10,18 @@ namespace HospitalManager.API.Controllers
     public class AuthController : ControllerBase
     {
         private readonly ILogger<AuthController> _logger;
-
-        public AuthController(ILogger<AuthController> logger)
+        private readonly AuthUseCase _authUseCase;
+        public AuthController(ILogger<AuthController> logger, AuthUseCase authUseCase)
         {
             _logger = logger;
+            _authUseCase = authUseCase;
         }
 
         [HttpPost]
         public IActionResult Auth([FromForm] RequestAuthJson auth)
         {
 
-            var useCase = new AuthUseCase();
+            var useCase = _authUseCase;
 
             var response = useCase.Execute(auth);
 

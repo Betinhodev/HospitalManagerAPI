@@ -7,6 +7,7 @@ using HospitalManager.Communication.Requests.Doctor;
 using HospitalManager.Communication.Responses;
 using HospitalManager.Communication.Responses.Doctor;
 using HospitalManager.Exceptions;
+using HospitalManager.Infrastructure.Repositories.Interfaces;
 using HospitalManager.Infrastructure.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -20,12 +21,18 @@ namespace HospitalManager.API.Controllers;
 [ApiController]
 public class DoctorController : ControllerBase
 {
-    //private readonly ILogger<DoctorController> _logger;
+    private readonly ILogger<DoctorController> _logger;
+    private readonly GetRelatedAppointmentsUseCase _getRelatedAppointmentsUseCase;
+    private readonly GetDoctorByIdUseCase _getDoctorByIdUseCase;
+    private readonly GetDoctorDocByCpfUseCase _getDoctorDocByCpfUseCase;
 
-    //public DoctorController(ILogger<DoctorController> logger)
-    //{
-    //    _logger = logger;    
-    //}
+    public DoctorController(ILogger<DoctorController> logger, GetRelatedAppointmentsUseCase getRelatedAppointmentsUseCase, GetDoctorByIdUseCase getDoctorByIdUseCase, GetDoctorDocByCpfUseCase getDoctorDocByCpfUseCase)
+    {
+        _logger = logger;
+        _getRelatedAppointmentsUseCase = getRelatedAppointmentsUseCase;
+        _getDoctorByIdUseCase = getDoctorByIdUseCase;
+        _getDoctorDocByCpfUseCase = getDoctorDocByCpfUseCase;
+    }
 
     [Authorize(Roles = "doctor, admin")]
     [HttpPost]
@@ -37,7 +44,7 @@ public class DoctorController : ControllerBase
 
         var response = useCase.Execute(request);
 
-       // _logger.LogInformation($"Doctor {request.Name} has been included.");
+        _logger.LogInformation($"Doctor {request.Name} has been included.");
         return Created(string.Empty, response);
     }
 
@@ -49,10 +56,10 @@ public class DoctorController : ControllerBase
     public IActionResult GetById([FromRoute]Guid id)
     {
 
-        var useCase = new GetDoctorByIdUseCase();
+        var useCase = _getDoctorByIdUseCase;
 
         var response = useCase.Execute(id);
-        //_logger.LogInformation($"Get request for {id} doctor.");
+        _logger.LogInformation($"Get request for {id} doctor.");
         return Ok(response);
     }
 
@@ -62,7 +69,7 @@ public class DoctorController : ControllerBase
     [ProducesResponseType(typeof(ResponseErrorJson),StatusCodes.Status404NotFound)]
     public IActionResult GetDocById([FromRoute]string cpf)
     {
-        var useCase = new GetDoctorDocByCpfUseCase();
+        var useCase = _getDoctorDocByCpfUseCase;
 
         var request = new RequestDoctorDocJson { CPF = cpf };
 
@@ -81,7 +88,7 @@ public class DoctorController : ControllerBase
 
     public IActionResult GetRelatedAppointments([FromQuery] string cpf, AppointmentStatus status)
     {
-        var useCase = new GetRelatedAppointmentsUseCase();
+        var useCase = _getRelatedAppointmentsUseCase;
 
         var request = new RequestDoctorRelatedAppointmentsJson
         {

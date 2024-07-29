@@ -1,7 +1,6 @@
 ﻿using HospitalManager.Communication.Enums;
 using HospitalManager.Communication.Requests.Appointment;
 using HospitalManager.Communication.Responses.Appointment;
-using HospitalManager.Infrastructure;
 using HospitalManager.Infrastructure.Entities;
 using HospitalManager.Infrastructure.Repositories.Interfaces;
 
